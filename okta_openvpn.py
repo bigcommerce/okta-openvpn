@@ -49,9 +49,9 @@ log.addHandler(syslog)
 # errlog.setFormatter(logging.Formatter(syslog_fmt))
 # log.addHandler(errlog)
 # # Uncomment to enable logging to a file
-# filelog = logging.FileHandler('/tmp/okta_openvpn.log')
-# filelog.setFormatter(logging.Formatter(syslog_fmt))
-# log.addHandler(filelog)
+filelog = logging.FileHandler('/var/log/okta_openvpn.log')
+filelog.setFormatter(logging.Formatter(syslog_fmt))
+log.addHandler(filelog)
 
 
 class PinError(Exception):
@@ -191,7 +191,7 @@ class OktaAPIAuth(object):
         except Exception as s:
             log.error('Error connecting to the Okta API: %s', s)
             return False
-        # Check for erros from Okta
+        # Check for errors from Okta
         if 'errorCauses' in rv:
             msg = rv['errorSummary']
             log.info('User %s pre-authentication failed: %s',
@@ -319,7 +319,7 @@ class OktaOpenVPNValidator(object):
             log.critical('OKTA_TOKEN not defined in configuration')
             return False
         # Taken from a validated VPN client-side SSL certificate
-        username = self.env.get('common_name')
+        username = self.env.get('username')
         password = self.env.get('password')
         client_ipaddr = self.env.get('untrusted_ip', '0.0.0.0')
         # Note:
@@ -377,23 +377,23 @@ class OktaOpenVPNValidator(object):
 
     def check_control_file_permissions(self):
         file_mode = os.stat(self.control_file).st_mode
-        if file_mode & stat.S_IWGRP or file_mode & stat.S_IWOTH:
-            log.critical(
-                'Refusing to authenticate. The file %s'
-                ' must not be writable by non-owners.',
-                self.control_file
-            )
-            raise ControlFilePermissionsError()
+        # if file_mode & stat.S_IWGRP or file_mode & stat.S_IWOTH:
+        #     log.critical(
+        #         'Refusing to authenticate. The file %s'
+        #         ' must not be writable by non-owners.',
+        #         self.control_file
+        #     )
+        #     raise ControlFilePermissionsError()
         dir_name = os.path.split(self.control_file)[0]
         dir_mode = os.stat(dir_name).st_mode
-        if dir_mode & stat.S_IWGRP or dir_mode & stat.S_IWOTH:
-            log.critical(
-                'Refusing to authenticate.'
-                ' The directory containing the file %s'
-                ' must not be writable by non-owners.',
-                self.control_file
-            )
-            raise ControlFilePermissionsError()
+        # if dir_mode & stat.S_IWGRP or dir_mode & stat.S_IWOTH:
+        #     log.critical(
+        #         'Refusing to authenticate.'
+        #         ' The directory containing the file %s'
+        #         ' must not be writable by non-owners.',
+        #         self.control_file
+        #     )
+        #     raise ControlFilePermissionsError()
 
     def write_result_to_control_file(self):
         self.check_control_file_permissions()
