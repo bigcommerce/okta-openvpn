@@ -16,13 +16,13 @@ class TestOktaAPIAuth(OktaTestCase):
         config['okta_url'] = url_with_trailing_slash
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, True)
+        self.assertEqual(auth, True)
 
         url_with_path = "{}/api/v1".format(self.okta_url)
         config['okta_url'] = url_with_path
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, True)
+        self.assertEqual(auth, True)
 
     # OktaAPIAuth.auth() tests:
     def test_username_empty(self):
@@ -30,7 +30,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['username'] = ''
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('Missing username or password', last_error)
 
@@ -39,7 +39,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['username'] = None
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('Missing username or password', last_error)
 
@@ -48,7 +48,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['password'] = ''
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('Missing username or password', last_error)
 
@@ -57,7 +57,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['password'] = None
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('Missing username or password', last_error)
 
@@ -66,7 +66,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['password'] = 'Testing1'
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('No second factor found for username', last_error)
 
@@ -75,7 +75,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['okta_url'] = 'http://127.0.0.1:86753'
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['error'][-1:][0]
         self.assertIn('Error connecting to the Okta API', last_error)
 
@@ -85,7 +85,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['password'] = 'BADPASSWORD123456'
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         expected = 'pre-authentication failed: Authentication failed'
         self.assertIn(expected, last_error)
@@ -96,7 +96,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['password'] = 'trustno1'
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, True)
+        self.assertEqual(auth, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('authenticated without MFA', last_error)
 
@@ -105,7 +105,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['username'] = 'user_MFA_ENROLL@example.com'
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('needs to enroll first', last_error)
 
@@ -113,7 +113,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config = self.config
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, True)
+        self.assertEqual(auth, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('now authenticated with MFA via Okta API', last_error)
 
@@ -122,7 +122,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['password'] = 'Testing1654321'
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['debug'][-1:][0]
         self.assertIn('MFA token authentication failed', last_error)
 
@@ -131,7 +131,7 @@ class TestOktaAPIAuth(OktaTestCase):
         config['username'] = 'user_PASSWORD_EXPIRED@example.com'
         okta = OktaAPIAuth(**config)
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is not allowed to authenticate', last_error)
 
@@ -144,7 +144,7 @@ class TestOktaAPIAuth(OktaTestCase):
 
         okta.doauth = doauth_fail
         auth = okta.auth()
-        self.assertEquals(auth, False)
+        self.assertEqual(auth, False)
         last_error = self.okta_log_messages['error'][-1:][0]
         self.assertIn('Unexpected error with the Okta API', last_error)
 
