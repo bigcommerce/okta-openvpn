@@ -82,7 +82,7 @@ class PublicKeyPinsetConnectionPool(urllib3.HTTPSConnectionPool):
             serialization.Encoding.DER,
             serialization.PublicFormat.SubjectPublicKeyInfo)
         public_key_sha256 = hashlib.sha256(public_key_raw).digest()
-        public_key_sha256_base64 = base64.b64encode(public_key_sha256)
+        public_key_sha256_base64 = base64.b64encode(public_key_sha256).decode("utf-8")
 
         if public_key_sha256_base64 not in self.pinset:
             pin_failure_message = (
@@ -261,8 +261,8 @@ class OktaOpenVPNValidator(object):
         self.config_file = None
         self.env = os.environ
         self.okta_config = {}
-        self.username_suffix = None
-        self.always_trust_username = False
+        self.username_suffix = ""
+        self.always_trust_username = "False"
         # These can be modified in the 'okta_openvpn.ini' file.
         # By default, we retry for 2 minutes:
         self.mfa_push_max_retries = "20"
@@ -287,21 +287,19 @@ class OktaOpenVPNValidator(object):
         for cfg_file in cfg_path:
             if os.path.isfile(cfg_file):
                 try:
-                    cfg = configparser.ConfigParser(defaults=parser_defaults)
+                    cfg = configparser.ConfigParser(defaults=parser_defaults, allow_no_value=True)
                     cfg.read(cfg_file)
                     self.site_config = {
                         'okta_url': cfg.get('OktaAPI', 'Url'),
                         'okta_token': cfg.get('OktaAPI', 'Token'),
-                        'mfa_push_max_retries': cfg.get('OktaAPI',
+                        'mfa_push_max_retries': cfg.getint('OktaAPI',
                                                         'MFAPushMaxRetries'),
-                        'mfa_push_delay_secs': cfg.get('OktaAPI',
+                        'mfa_push_delay_secs': cfg.getint('OktaAPI',
                                                        'MFAPushDelaySeconds'),
                         }
-                    always_trust_username = cfg.get(
+                    self.always_trust_username = cfg.getboolean(
                         'OktaAPI',
                         'AllowUntrustedUsers')
-                    if always_trust_username == 'True':
-                        self.always_trust_username = True
                     self.username_suffix = cfg.get('OktaAPI', 'UsernameSuffix')
                     return True
                 except MissingSectionHeaderError as e:
