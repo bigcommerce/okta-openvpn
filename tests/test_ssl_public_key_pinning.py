@@ -47,7 +47,7 @@ class TestOktaAPIAuthTLSPinning(OktaTestCase):
         self.assertFalse(validator.user_valid)
         tmp.file.seek(0)
         rv = tmp.file.read()
-        self.assertEquals(rv, '0')
+        self.assertEqual(rv, '0')
 
     def test_connect_to_okta_with_good_pins(self):
         config = self.config
@@ -56,7 +56,7 @@ class TestOktaAPIAuthTLSPinning(OktaTestCase):
         result = okta.preauth()
         # This is what we'll get since we're sending an invalid token:
         self.assertIn('errorSummary', result)
-        self.assertEquals(result['errorSummary'], 'Invalid token provided')
+        self.assertEqual(result['errorSummary'], 'Invalid token provided')
 
     def test_connect_to_example_with_good_pin(self):
         config = self.config
@@ -64,7 +64,7 @@ class TestOktaAPIAuthTLSPinning(OktaTestCase):
         okta = OktaAPIAuth(**config)
         result = okta.preauth()
         self.assertIn('status', result)
-        self.assertEquals(result['status'], 'MFA_REQUIRED')
+        self.assertEqual(result['status'], 'MFA_REQUIRED')
 
     def test_connect_to_example_with_bad_pin(self):
         config = self.config

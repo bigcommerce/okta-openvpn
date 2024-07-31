@@ -20,7 +20,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator = OktaOpenVPNValidator()
         validator.config_file = '/dev/false'
         rv = validator.read_configuration_file()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
         last_error = self.okta_log_messages['critical'][-1:][0]
         self.assertIn('Failed to load config', last_error)
 
@@ -29,7 +29,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator = OktaOpenVPNValidator()
         validator.env = env
         rv = validator.load_environment_variables()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
         last_error = self.okta_log_messages['critical'][-1:][0]
         self.assertIn('OKTA_URL not defined', last_error)
 
@@ -43,7 +43,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.site_config = cfg
         validator.env = env
         rv = validator.load_environment_variables()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
         last_error = self.okta_log_messages['critical'][-1:][0]
         self.assertIn('OKTA_TOKEN not defined', last_error)
 
@@ -59,7 +59,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.env = env
         rv = validator.load_environment_variables()
         rv = validator.authenticate()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
         last_error = self.okta_log_messages['warning'][-1:][0]
         self.assertIn('is not trusted - failing', last_error)
 
@@ -81,7 +81,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
 
         rv = validator.authenticate()
-        self.assertEquals(rv, True)
+        self.assertEqual(rv, True)
         last_error = self.okta_log_messages['info'][-1]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 
@@ -130,7 +130,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
 
         rv = validator.authenticate()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
         last_error = self.okta_log_messages['info'][-1]
         self.assertIn('push timed out', last_error)
 
@@ -152,7 +152,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
 
         rv = validator.authenticate()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
 
     def test_with_username_and_password(self):
         cfg = {
@@ -170,7 +170,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
 
         rv = validator.authenticate()
-        self.assertEquals(rv, True)
+        self.assertEqual(rv, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 
@@ -196,7 +196,7 @@ class TestOktaAPIAuth(OktaTestCase):
         # Disable Public Key Pinning
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
         rv = validator.authenticate()
-        self.assertEquals(rv, True)
+        self.assertEqual(rv, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 
@@ -223,7 +223,7 @@ class TestOktaAPIAuth(OktaTestCase):
         # Disable Public Key Pinning
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
         rv = validator.authenticate()
-        self.assertEquals(rv, True)
+        self.assertEqual(rv, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 
@@ -253,7 +253,7 @@ class TestOktaAPIAuth(OktaTestCase):
             validator.okta_config['assert_pinset'] = [
                 self.herokuapp_dot_com_pin]
             rv = validator.authenticate()
-            self.assertEquals(rv, False)
+            self.assertEqual(rv, False)
 
     def test_suffix_with_username_and_password(self):
         cfg = {
@@ -272,7 +272,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
 
         rv = validator.authenticate()
-        self.assertEquals(rv, True)
+        self.assertEqual(rv, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 
@@ -293,7 +293,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
 
         rv = validator.authenticate()
-        self.assertEquals(rv, True)
+        self.assertEqual(rv, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 
@@ -321,7 +321,7 @@ class TestOktaAPIAuth(OktaTestCase):
         # Disable Public Key Pinning
         validator.okta_config['assert_pinset'] = [self.herokuapp_dot_com_pin]
         rv = validator.authenticate()
-        self.assertEquals(rv, True)
+        self.assertEqual(rv, True)
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 
@@ -337,7 +337,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.config_file = cfg.name
         validator.env = env
         rv = validator.read_configuration_file()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
 
     def test_return_error_code_true(self):
         validator = OktaOpenVPNValidator()
@@ -368,7 +368,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.env = env
         validator.load_environment_variables()
         rv = validator.authenticate()
-        self.assertEquals(rv, False)
+        self.assertEqual(rv, False)
         last_error = self.okta_log_messages['error'][-1:][0]
         self.assertIn('authentication failed, because', last_error)
 
@@ -379,7 +379,7 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.write_result_to_control_file()
         tmp.file.seek(0)
         rv = tmp.file.read()
-        self.assertEquals(rv, '0')
+        self.assertEqual(rv, '0')
 
     def test_write_1_to_control_file(self):
         tmp = tempfile.NamedTemporaryFile()
@@ -389,25 +389,25 @@ class TestOktaAPIAuth(OktaTestCase):
         validator.write_result_to_control_file()
         tmp.file.seek(0)
         rv = tmp.file.read()
-        self.assertEquals(rv, '1')
+        self.assertEqual(rv, '1')
 
     def test_write_ro_to_control_file(self):
         tmp = tempfile.NamedTemporaryFile()
-        os.chmod(tmp.name, 0400)
+        os.chmod(tmp.name, 0o400)
         validator = OktaOpenVPNValidator()
         validator.user_valid = True
         validator.control_file = tmp.name
         validator.write_result_to_control_file()
         tmp.file.seek(0)
         rv = tmp.file.read()
-        self.assertEquals(rv, '')
+        self.assertEqual(rv, '')
 
         tmp.file.seek(0)
         validator.user_valid = False
         validator.write_result_to_control_file()
         tmp.file.seek(0)
         rv = tmp.file.read()
-        self.assertEquals(rv, '')
+        self.assertEqual(rv, '')
 
     def test_OktaOpenVPNValidator_run(self):
         cfg = {
@@ -431,7 +431,7 @@ class TestOktaAPIAuth(OktaTestCase):
         self.assertTrue(validator.user_valid)
         tmp.file.seek(0)
         rv = tmp.file.read()
-        self.assertEquals(rv, '1')
+        self.assertEqual(rv, '1')
         last_error = self.okta_log_messages['info'][-1:][0]
         self.assertIn('is now authenticated with MFA via Okta API', last_error)
 

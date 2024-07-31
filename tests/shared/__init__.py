@@ -74,7 +74,7 @@ class MockLoggingHandler(logging.Handler):
     def reset(self):
         self.acquire()
         try:
-            for message_list in self.messages.values():
+            for message_list in list(self.messages.values()):
                 message_list = []
         finally:
             self.release()
